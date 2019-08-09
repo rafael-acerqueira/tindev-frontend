@@ -11,7 +11,8 @@ import {
 	Bio,
 	ButtonsContainer,
 	Button,
-	Footer
+	Footer,
+	Empty
 } from './styles'
 
 import api from '../../services/api'
@@ -30,28 +31,50 @@ const Main = ({ match }) => {
 		loadusers()
 	}, [match.params.id])
 
+	const handleLike = async id => {
+		await api.post(`devs/${id}/likes`, null, {
+			headers: {
+				user: match.params.id
+			}
+		})
+		setDevs(devs.filter(dev => dev._id !== id))
+	}
+
+	const handleDislike = async id => {
+		await api.post(`devs/${id}/dislikes`, null, {
+			headers: {
+				user: match.params.id
+			}
+		})
+		setDevs(devs.filter(dev => dev._id !== id))
+	}
+
 	return (
 		<Container>
 			<img src={logo} alt="logo" />
-			<List>
-				{devs.map(dev => (
-					<ListItem key={dev._id}>
-						<ImageList src={dev.avatar} alt={dev.name} />
-						<Footer>
-							<Name>{dev.name}</Name>
-							<Bio>{dev.bio}</Bio>
-						</Footer>
-						<ButtonsContainer>
-							<Button type="button">
-								<ImageList src={dislike} alt="dislike" />
-							</Button>
-							<Button type="button">
-								<ImageList src={like} alt="like" />
-							</Button>
-						</ButtonsContainer>
-					</ListItem>
-				))}
-			</List>
+			{devs.length > 0 ? (
+				<List>
+					{devs.map(dev => (
+						<ListItem key={dev._id}>
+							<ImageList src={dev.avatar} alt={dev.name} />
+							<Footer>
+								<Name>{dev.name}</Name>
+								<Bio>{dev.bio}</Bio>
+							</Footer>
+							<ButtonsContainer>
+								<Button type="button" onClick={() => handleDislike(dev._id)}>
+									<ImageList src={dislike} alt="dislike" />
+								</Button>
+								<Button type="button" onClick={() => handleLike(dev._id)}>
+									<ImageList src={like} alt="like" />
+								</Button>
+							</ButtonsContainer>
+						</ListItem>
+					))}
+				</List>
+			) : (
+				<Empty>Acabou :(</Empty>
+			)}
 		</Container>
 	)
 }

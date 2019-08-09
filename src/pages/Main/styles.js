@@ -64,3 +64,10 @@ export const Button = styled.button`
 		transition: all 0.2s;
 	}
 `
+
+export const Empty = styled.div`
+	font-size: 32px;
+	color: #999;
+	font-weight: bold;
+	margin-top: 300px;
+`
