@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import logo from '../../assets/logo.svg'
 import like from '../../assets/like.svg'
 import dislike from '../../assets/dislike.svg'
@@ -51,7 +52,10 @@ const Main = ({ match }) => {
 
 	return (
 		<Container>
-			<img src={logo} alt="logo" />
+			<Link to="/">
+				<img src={logo} alt="logo" />
+			</Link>
+
 			{devs.length > 0 ? (
 				<List>
 					{devs.map(dev => (
