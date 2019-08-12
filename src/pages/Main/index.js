@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import io from 'socket.io-client'
 import { Link } from 'react-router-dom'
 import logo from '../../assets/logo.svg'
 import like from '../../assets/like.svg'
@@ -30,6 +31,16 @@ const Main = ({ match }) => {
 			setDevs(data)
 		}
 		loadusers()
+	}, [match.params.id])
+
+	useEffect(() => {
+		const socket = io('http://localhost:3333', {
+			query: { user: match.params.id }
+		})
+
+		socket.on('match', dev => {
+			console.log(dev)
+		})
 	}, [match.params.id])
 
 	const handleLike = async id => {
