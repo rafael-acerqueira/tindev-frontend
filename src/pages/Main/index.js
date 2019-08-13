@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import logo from '../../assets/logo.svg'
 import like from '../../assets/like.svg'
 import dislike from '../../assets/dislike.svg'
+import itsamatch from '../../assets/itsamatch.png'
 import {
 	Container,
 	List,
@@ -14,13 +15,16 @@ import {
 	ButtonsContainer,
 	Button,
 	Footer,
-	Empty
+	Empty,
+	Avatar,
+	MatchContainer
 } from './styles'
 
 import api from '../../services/api'
 
 const Main = ({ match }) => {
 	const [devs, setDevs] = useState([])
+	const [matchDev, setMatchDev] = useState(null)
 
 	useEffect(() => {
 		const loadusers = async () => {
@@ -39,7 +43,7 @@ const Main = ({ match }) => {
 		})
 
 		socket.on('match', dev => {
-			console.log(dev)
+			setMatchDev(dev)
 		})
 	}, [match.params.id])
 
@@ -89,6 +93,18 @@ const Main = ({ match }) => {
 				</List>
 			) : (
 				<Empty>Acabou :(</Empty>
+			)}
+
+			{matchDev && (
+				<MatchContainer>
+					<img src={itsamatch} alt="Its a match" />
+					<Avatar src={matchDev.avatar} alt="avatar" />
+					<strong>{matchDev.name}</strong>
+					<p>{matchDev.bio}</p>
+					<button type="button" onClick={() => setMatchDev(null)}>
+						Fechar
+					</button>
+				</MatchContainer>
 			)}
 		</Container>
 	)
